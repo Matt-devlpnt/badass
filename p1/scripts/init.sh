@@ -27,6 +27,29 @@ wget http://ftp.fr.debian.org/debian/pool/non-free/d/dynamips/dynamips_0.2.14-1_
 sudo dpkg -i dynamips_0.2.14-1_amd64.deb
 rm -rf ./dynamips_0.2.14-1_amd64.deb 
 
+############################## vpcs installation ################################
+wget https://github.com/GNS3/vpcs/archive/refs/tags/v0.8.3.tar.gz
+tar xzf v0.8.3.tar.gz 
+cd vpcs-0.8.3/src
+bahs mk.sh 
+mv vpcs /usr/bin/
+sudo chown root:root /usr/bin/vpcs 
+cd ../..
+rm -rf v0.8.3.tar.gz vpcs-0.8.3
+
+############################## ubridge installation #############################
+sudo apt install -y cmake make g++ libpcap-dev libelf-dev libcap-dev
+git clone https://github.com/GNS3/ubridge.git
+cd ubridge
+make
+sudo make install
+cd ..
+rm -rf ubridge
+
+############################## JWT secret key installation ######################
+JWT_SECRET_KEY=$(openssl rand -hex 32)
+echo -e "[auth]\njwt_secret_key = $JWT_SECRET_KEY" > $HOME/.config/GNS3/3.0/gns3_server.conf
+
 pipx ensurepath
 pipx install gns3-server
 pipx install gns3-gui
