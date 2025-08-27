@@ -31,8 +31,8 @@ rm -rf ./dynamips_0.2.14-1_amd64.deb
 wget https://github.com/GNS3/vpcs/archive/refs/tags/v0.8.3.tar.gz
 tar xzf v0.8.3.tar.gz 
 cd vpcs-0.8.3/src
-bahs mk.sh 
-mv vpcs /usr/bin/
+bash mk.sh 
+sudo mv vpcs /usr/bin/
 sudo chown root:root /usr/bin/vpcs 
 cd ../..
 rm -rf v0.8.3.tar.gz vpcs-0.8.3
