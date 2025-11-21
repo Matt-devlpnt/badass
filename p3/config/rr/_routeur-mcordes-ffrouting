@@ -1,0 +1,21 @@
+# syntax=docker/dockerfile:1
+# escape=\
+
+FROM frrouting/frr@sha256:1e3a1d5335a2e8a4416b80e5195f2fc22245278e23555be6769b1ec2c52b97d9
+
+RUN apk update\
+    apk add vim
+
+# Activate bgpd, ospfd and isisd daemon
+# NB: The watchfrr, zebra and staticd daemons are always started.
+COPY ./utils/daemons /etc/frr
+COPY ./utils/ospfd.conf /etc/frr
+COPY ./utils/bgpd.conf /etc/frr
+
+
+
+# When activating a daemon for the first time, a config file has to present and owned by uesr and group frr:frr and permissions should be u=rw,g=r,o=.
+WORKDIR /etc/frr
+RUN touch vtysh.conf isisd.conf
+RUN chmod 640 bgpd.conf ospfd.conf vtysh.conf isisd.conf
+RUN chown frr:frr bgpd.conf ospfd.conf vtysh.conf isisd.conf
