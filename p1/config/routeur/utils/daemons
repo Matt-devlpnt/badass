@@ -80,7 +80,7 @@ pathd_options="  -A 127.0.0.1"
 
 # configuration profile
 #
-#frr_profile="traditional"
+frr_profile="traditional"
 #frr_profile="datacenter"
 
 
@@ -89,7 +89,7 @@ pathd_options="  -A 127.0.0.1"
 # reasonable value for your setup if you are expecting a large number of peers
 # in say BGP.
 #
-#MAX_FDS=1024
+MAX_FDS=1024
 
 
 # For any daemon, you can specify a "wrap" command to start instead of starting

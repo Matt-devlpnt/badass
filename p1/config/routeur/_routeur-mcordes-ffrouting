@@ -3,8 +3,8 @@
 
 FROM frrouting/frr@sha256:1e3a1d5335a2e8a4416b80e5195f2fc22245278e23555be6769b1ec2c52b97d9
 
-RUN apk update\
-    apk add vim
+RUN apk update \
+    && apk add vim
 
 # Activate bgpd, ospfd and isisd daemon
 # NB: The watchfrr, zebra and staticd daemons are always started.
@@ -12,6 +12,11 @@ COPY ./utils/daemons /etc/frr
 
 # When activating a daemon for the first time, a config file has to present and owned by uesr and group frr:frr and permissions should be u=rw,g=r,o=.
 WORKDIR /etc/frr
-RUN touch bgpd.conf ospfd.conf isisd.conf
-RUN chmod 640 bgpd.conf ospfd.conf isisd.conf
-RUN chown frr:frr bgpd.conf ospfd.conf isisd.conf
+
+RUN touch frr.conf zebra.conf bgpd.conf ospfd.conf isisd.conf vtysh.conf
+
+RUN chmod 640 frr.conf zebra.conf bgpd.conf ospfd.conf isisd.conf
+RUN chown frr:frr frr.conf zebra.conf bgpd.conf ospfd.conf isisd.conf
+
+RUN chmod 660 vtysh.conf
+RUN chown frr:frrvty vtysh.conf
