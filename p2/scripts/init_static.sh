@@ -3,6 +3,10 @@
 DOCKER=$(docker ps -q)
 
 
+#################################################################################
+# INIT HOST1 ####################################################################
+#################################################################################
+
 # ip addr add 30.1.1.1/24 dev eth1
 # Assigns the IP address 30.1.1.1 with a subnet mask of /24 (255.255.255.0) to the eth1 interface. This configures eth0 for communication on the 10.1.1.0/24 network
 
@@ -11,13 +15,21 @@ init_host1() {
 }
 
 
+#################################################################################
+# INIT HOST2 ####################################################################
+#################################################################################
+
 # ip addr add 30.1.1.2/24 dev eth1
 # Assigns the IP address 30.1.1.2 with a subnet mask of /24 (255.255.255.0) to the eth1 interface. This configures eth0 for communication on the 10.1.1.0/24 network
 
 init_host2() {
 	docker exec $1 ip addr add 30.1.1.2/24 dev eth1
-}
+} 
 
+
+#################################################################################
+# INIT ROUTEUR1 #################################################################
+#################################################################################
 
 # ip link add br0 type bridge
 # Creates a network bridge device named br0. A bridge connects multiple network interfaces at the data link layer (Layer 2)
@@ -57,6 +69,10 @@ init_routeur1() {
 	"
 }
 
+
+#################################################################################
+# INIT ROUTEUR2 #################################################################
+#################################################################################
 
 # ip link add br0 type bridge
 # Creates a network bridge device named br0. A bridge connects multiple network interfaces at the data link layer (Layer 2)
