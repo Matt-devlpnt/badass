@@ -1,5 +1,4 @@
-all:
-	@bash ./scripts/init.sh
+all: static
 
 static:
 	@bash ./scripts/init_static.sh
