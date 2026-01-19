@@ -119,11 +119,11 @@ init_leaf1() {
 # ip link set dev vxlan10 up
 # Activates the vxlan10 interface, bringing it online
 
-# brctl addif br0 eth1
+# brctl addif br0 eth0
 # Adds the eth1 interface to the br0 bridge. Traffic from eth1 will now be bridged through br0
 
 # brctl addif br0 vxlan10
-# Adds the vxlan10 interface to the br0 bridge, allowing VXLAN traffic to be bridged alongside eth1
+# Adds the vxlan10 interface to the br0 bridge, allowing VXLAN traffic to be bridged alongside eth0
 
 init_leaf2() {
 	docker exec $1 bash -c "
@@ -181,11 +181,11 @@ init_leaf2() {
 # ip link set dev vxlan10 up
 # Activates the vxlan10 interface, bringing it online
 
-# brctl addif br0 eth1
+# brctl addif br0 eth0
 # Adds the eth1 interface to the br0 bridge. Traffic from eth1 will now be bridged through br0
 
 # brctl addif br0 vxlan10
-# Adds the vxlan10 interface to the br0 bridge, allowing VXLAN traffic to be bridged alongside eth1
+# Adds the vxlan10 interface to the br0 bridge, allowing VXLAN traffic to be bridged alongside eth0
 
 init_leaf3() {
 	docker exec $1 bash -c "
