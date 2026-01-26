@@ -75,27 +75,60 @@ init_leaf1() {
 
 	docker exec $1 vtysh -c "
 		configure terminal
-		!
+
+		# Set the router hostname for identification and troubleshooting
 		hostname leaf_alpine_frrouting_mcordes-1
+
+		# Disable IPv6 forwarding (IPv6 not used in this lab)
 		no ipv6 forwarding
-		!
+
+
+
+		# Configure the underlay interface towards the Route Reflector
 		interface eth0
+
+		 # Assign a point-to-point underlay IP address
 		 ip address 10.1.1.2/30
+
+		 # Enable OSPF on this interface (backbone area)
 		 ip ospf area 0
-		!
+
+
+
+		# Configure a loopback interface for stable router identification
 		interface lo
+
+		 # Assign a /32 loopback IP address
 		 ip address 1.1.1.2/32
+
+	 	 # Advertise the loopback into OSPF
 		 ip ospf area 0
-		!
+
+
+
+		# Start BGP in AS 1 (iBGP)
 		router bgp 1
+
+		 # Define the Route Reflector as an iBGP neighbor
 		 neighbor 1.1.1.1 remote-as 1
+
+		 # Use the loopback interface as the BGP source address
 		 neighbor 1.1.1.1 update-source lo
-		 !
+
+		 # Enter the EVPN address family
 		 address-family l2vpn evpn
+
+		  # Activate the EVPN session with the Route Reflector
 		  neighbor 1.1.1.1 activate
+
+		  # Automatically advertise all configured VXLAN VNIs
 		  advertise-all-vni
+
 		 exit-address-family
-		!
+
+
+
+		# Enable the OSPF routing process
 		router ospf
 	"
 }
@@ -137,27 +170,60 @@ init_leaf2() {
 
 	docker exec $1 vtysh -c "
 		configure terminal
-		!
+
+		# Set the router hostname for identification and troubleshooting
 		hostname leaf_alpine_frrouting_mcordes-2
+
+		# Disable IPv6 forwarding (IPv6 not used in this lab)
 		no ipv6 forwarding
-		!
+
+
+
+		# Configure the underlay interface towards the Route Reflector
 		interface eth1
+
+		 # Assign a point-to-point underlay IP address
 		 ip address 10.1.1.6/30
+
+		 # Enable OSPF on this interface (backbone area)
 		 ip ospf area 0
-		!
+
+
+
+		# Configure a loopback interface for stable router identification
 		interface lo
+
+		 # Assign a /32 loopback IP address
 		 ip address 1.1.1.3/32
+
+	 	 # Advertise the loopback into OSPF
 		 ip ospf area 0
-		!
+
+
+
+		# Start BGP in AS 1 (iBGP)
 		router bgp 1
+
+		 # Define the Route Reflector as an iBGP neighbor
 		 neighbor 1.1.1.1 remote-as 1
+
+		 # Use the loopback interface as the BGP source address
 		 neighbor 1.1.1.1 update-source lo
-		 !
+
+		 # Enter the EVPN address family
 		 address-family l2vpn evpn
+
+		  # Activate the EVPN session with the Route Reflector
 		  neighbor 1.1.1.1 activate
+
+		  # Automatically advertise all configured VXLAN VNIs
 		  advertise-all-vni
+
 		 exit-address-family
-		!
+
+
+
+		# Enable the OSPF routing process
 		router ospf
 	"
 }
@@ -199,27 +265,60 @@ init_leaf3() {
 
 	docker exec $1 vtysh -c "
 		configure terminal
-		!
+
+		# Set the router hostname for identification and troubleshooting
 		hostname leaf_alpine_frrouting_mcordes-3
+
+		# Disable IPv6 forwarding (IPv6 not used in this lab)
 		no ipv6 forwarding
-		!
+
+
+
+		# Configure the underlay interface towards the Route Reflector
 		interface eth2
+
+		 # Assign a point-to-point underlay IP address
 		 ip address 10.1.1.10/30
+
+		 # Enable OSPF on this interface (backbone area)
 		 ip ospf area 0
-		!
+
+
+
+		# Configure a loopback interface for stable router identification
 		interface lo
+
+		 # Assign a /32 loopback IP address
 		 ip address 1.1.1.4/32
+
+	 	 # Advertise the loopback into OSPF
 		 ip ospf area 0
-		!
+
+
+
+		# Start BGP in AS 1 (iBGP)
 		router bgp 1
+
+		 # Define the Route Reflector as an iBGP neighbor
 		 neighbor 1.1.1.1 remote-as 1
+
+		 # Use the loopback interface as the BGP source address
 		 neighbor 1.1.1.1 update-source lo
-		 !
+
+		 # Enter the EVPN address family
 		 address-family l2vpn evpn
+
+		  # Activate the EVPN session with the Route Reflector
 		  neighbor 1.1.1.1 activate
+
+		  # Automatically advertise all configured VXLAN VNIs
 		  advertise-all-vni
+
 		 exit-address-family
-		!
+
+
+
+		# Enable the OSPF routing process
 		router ospf
 	"
 }
@@ -232,37 +331,68 @@ init_leaf3() {
 init_rr() {
 	docker exec $1 vtysh -c "
 		configure terminal
-		!
+	
+		# Set the Route Reflector hostname
 		hostname rr_mcordes
+	
+		# Disable IPv6 forwarding
 		no ipv6 forwarding
-		!
+	
+		# Underlay link towards LEAF1
 		interface eth0
-		 ip address 10.1.1.1/30
-		!
+			# Assign point-to-point IP address
+			ip address 10.1.1.1/30
+
+	
+		# Underlay link towards LEAF2
 		interface eth1
-		 ip address 10.1.1.5/30
-		!
+			# Assign point-to-point IP address
+			ip address 10.1.1.5/30
+
+	
+		# Underlay link towards LEAF3
 		interface eth2
-		 ip address 10.1.1.9/30
-		!
+			# Assign point-to-point IP address
+			ip address 10.1.1.9/30
+
+	
+		# Loopback interface used as BGP router-id and session endpoint
 		interface lo
-		 ip address 1.1.1.1/32
-		!
+			# Assign a /32 loopback address
+			ip address 1.1.1.1/32
+
+	
+		# Start BGP in AS 1 (iBGP)
 		router bgp 1
-		 neighbor ibgp peer-group
-		 neighbor ibgp remote-as 1
-		 neighbor ibgp update-source lo
-		 bgp listen range 1.1.1.0/29 peer-group ibgp
-		 !
-		 address-family l2vpn evpn
-		  neighbor ibgp activate
-		  neighbor ibgp route-reflector-client
-		 exit-address-family
-		!
+	
+			# Create an iBGP peer-group for all leaf switches
+			neighbor ibgp peer-group
+	
+			# Define common iBGP parameters
+			neighbor ibgp remote-as 1
+			neighbor ibgp update-source lo
+	
+			# Dynamically accept iBGP neighbors in this IP range
+			bgp listen range 1.1.1.0/29 peer-group ibgp
+
+	
+			# Enter the EVPN address family
+			address-family l2vpn evpn
+	
+				# Activate EVPN for all iBGP peers
+				neighbor ibgp activate
+	
+				# Configure peers as Route Reflector clients
+				neighbor ibgp route-reflector-client
+	
+			exit-address-family
+
+	
+
+		# Enable OSPF and advertise all interfaces
 		router ospf
-		 network 0.0.0.0/0 area 0
-		!
-		line vty 
+			# Enable OSPF on all interfaces in area 0
+			network 0.0.0.0/0 area 0
 	"
 }
 
